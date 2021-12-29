@@ -42,6 +42,7 @@ if __name__ == '__main__':
             page.encoding = 'utf-8'
             data = page.text.strip("var hq_str_sz000000=")
             lists = data.split(',')
+#            print(lists)
             v_now = float(lists[3])
             v_start = float(lists[2])
             bfb = (v_now - v_start) / v_start * 100

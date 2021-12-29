@@ -9,7 +9,7 @@ csv_file = csv.reader(open('code.csv', 'r'))
 filedata = list(csv_file)
 for codeinfo in filedata:
     idx = filedata.index(codeinfo)
-    if idx == 0 or codeinfo[1][0] == '8' or codeinfo[1][0:3] == '68':
+    if idx == 0 or codeinfo[1][0] == '8' or codeinfo[1][0:2] == '68':
         #print(codeinfo)
         continue
     print(idx)
