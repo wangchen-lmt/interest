@@ -9,12 +9,20 @@ csv_file = csv.reader(open('./data/list.csv', 'r'))
 filedata = list(csv_file)
 
 # for mmin in range(-10, 9, 1):
-#     mmax = mmin + 1
+#   mmax = mmin + 1
+max_suc = 0
+max_fail = 0
 buytime = 0
 suctime = 0
 d2_end = [0]*3
 end_income = [0]*3
 start_income = [0]*3
+d20_income_x = [0]*2
+d21_income_x = [0]*2
+d22_income_x = [0]*2
+d20_income_d = [0]*2
+d21_income_d = [0]*2
+d22_income_d = [0]*2
 all_income = 0
 for codeinfo in filedata:
     idx = filedata.index(codeinfo)
@@ -23,7 +31,7 @@ for codeinfo in filedata:
 
     datalen = len(codedata)
     num = 5 + 1
-    for i in range(7, datalen-num-1):
+    for i in range(0, datalen-4):
         dailydata = codedata[datalen-1-i]
         #if float(dailydata[3]) >10.0 :# or float(dailydata[3]) <10.0:
           # continue
@@ -43,37 +51,48 @@ for codeinfo in filedata:
         e1 = float(codedata[datalen-1-i-1][6])
         e2 = float(codedata[datalen-1-i-2][6])
         e3 = float(codedata[datalen-1-i-3][6])
+ 
+        l0 = float(codedata[datalen-1-i-0][10])
+        l1 = float(codedata[datalen-1-i-1][10])
+        l2 = float(codedata[datalen-1-i-2][10])
+        l3 = float(codedata[datalen-1-i-3][10])
 
         if d0 >9.9 and d1 > 9.9 and s2!=h2:
           
           if (-10.0 < (s2 - e1)/e1*100 < -7.0) or \
-             (-4.0 < (s2 - e1)/e1*100 < -3.0) or\
-             (-3.0 < (s2 - e1)/e1*100 < -2.0) or\
-             (-2.0 < (s2 - e1)/e1*100 < -1.0) or\
-             (-1.0 < (s2 - e1)/e1*100 < 0.0) or\
-             (-0.0 < (s2 - e1)/e1*100 < 1.0) :
+            (-4.0 < (s2 - e1)/e1*100 < -3.0) or\
+            (-3.0 < (s2 - e1)/e1*100 < -2.0) or\
+            (-2.0 < (s2 - e1)/e1*100 < -1.0) or\
+            (-1.0 < (s2 - e1)/e1*100 < 0.0) or\
+            (-0.0 < (s2 - e1)/e1*100 < 1.0) :
     
             buytime+=1
             all_income += (e3 - s2)/s2*100
-
+            
             if e3>s2:
                 suctime+=1
+
+            if (e3 - s2 )/s2*100 > max_suc:
+              max_suc = (e3 - s2 )/s2*100
+            if (e3 - s2 )/s2*100 < max_fail:
+              max_fail = (e3 - s2 )/s2*100
 
             if d2 > 9.9:
                 d2_end[2] += 1
                 end_income[2] += (e3 - s2)/s2*100
                 start_income[2] += (s3 - s2)/s2*100
 
+
             elif d2 >=0.0:
                 d2_end[1] += 1
                 end_income[1] += (e3 - s2)/s2*100
                 start_income[1] += (s3 - s2)/s2*100
-                
+
             else:
                 d2_end[0] += 1
                 end_income[0] += (e3 - s2)/s2*100
                 start_income[0] += (s3 - s2)/s2*100
-              
+           
 # print(mmin, mmax)
 print(buytime)
 print(suctime)
@@ -85,6 +104,7 @@ if buytime != 0:
 print(d2_end)
 print(end_income)
 print(start_income)
+print(max_suc, max_fail)
 
 list0 = []
 for codeinfo in filedata:

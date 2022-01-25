@@ -7,21 +7,19 @@ from datetime import datetime
 import os
 
 def get_config():
-    config_path = "config.json"
+    config_path = "config-qq.json"
     with open(config_path) as f:
         config = json.loads(f.read())
         return config
 
 if __name__ == '__main__':
-    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'
+    user_agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0"
 
     config = get_config()
-    cookie = config['cookie']
-    headers = {'User_Agent': user_agent, 'Cookie': cookie}
+    headers = {'User_Agent': user_agent, 'Referer':'https://gu.qq.com', 'Connection':'keep-alive'}
     objs = config['obj']
 
     plt.ion()
-    #plt.figure(1).patch.set_facecolor('black')
     plt.rcParams['axes.facecolor'] = 'w'
     t=[[] for i in range(len(objs))]
     v=[[] for i in range(len(objs))]
@@ -37,20 +35,23 @@ if __name__ == '__main__':
         time.sleep(5)
         #plt.clf()
         i = 0
-        for url in objs:
+        for code in objs:
+            url = ''
+            if code[0] == '6':
+                url = 'https://qt.gtimg.cn/?q=sh' + code +'?r=1643095048199'
+            else:
+                url = 'https://qt.gtimg.cn/?q=sz' + code +'?r=1643095048199'
             page = requests.get(url, headers=headers)
             page.encoding = 'utf-8'
-            data = page.text.strip("var hq_str_sz000000=")
-            lists = data.split(',')
+            data = page.text
+            lists = data.split('~')
 #            print(lists)
             v_now = float(lists[3])
-            v_start = float(lists[2])
+            v_start = float(lists[4])
             bfb = (v_now - v_start) / v_start * 100
-            datalist[i*m] = lists[2]
-            datalist[i*m+1] = lists[3]
+            datalist[i*m] = v_start 
+            datalist[i*m+1] = v_now
             datalist[i*m+2] = round(bfb,2)
-            datalist[i*m+3] = (int(lists[8]) - lnlist[i])/1000000
-            lnlist[i] = int(lists[8])
             i = i+1
            # print(lists[2], lists[3], round(bfb,2))
         i = 0

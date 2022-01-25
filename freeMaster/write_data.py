@@ -9,11 +9,12 @@ csv_file = csv.reader(open('code.csv', 'r'))
 filedata = list(csv_file)
 for codeinfo in filedata:
     idx = filedata.index(codeinfo)
+    print(codeinfo[1][0:2])
     if idx == 0 or codeinfo[1][0] == '8' or codeinfo[1][0:2] == '68':
-        #print(codeinfo)
+       # print(codeinfo)
         continue
     print(idx)
-    if idx % 500 == 0:
+    if idx % 1000 == 0:
         time.sleep(61)        
     name = './data/' + codeinfo[2] + '.csv'
     csv_w = open(name, 'w', encoding='utf-8')
